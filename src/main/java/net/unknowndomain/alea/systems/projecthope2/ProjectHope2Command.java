@@ -26,10 +26,11 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionGroup;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.javacord.api.entity.message.MessageBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -37,6 +38,7 @@ import org.javacord.api.entity.message.MessageBuilder;
  */
 public class ProjectHope2Command extends RpgSystemCommand
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProjectHope2Command.class);
     private static final RpgSystemDescriptor DESC = new RpgSystemDescriptor("Project H.O.P.E. 2nd Edition", "ph2", "project-hope-2nd");
     
     private static final String THRESHOLD_PARAM = "threshold";
@@ -47,7 +49,6 @@ public class ProjectHope2Command extends RpgSystemCommand
     
     static {
         CMD_OPTIONS = new Options();
-        OptionGroup rollMode = new OptionGroup();
         CMD_OPTIONS.addOption(
                 Option.builder("t")
                         .longOpt(THRESHOLD_PARAM)
@@ -110,6 +111,7 @@ public class ProjectHope2Command extends RpgSystemCommand
             {
                 return HelpWrapper.printHelp(prefixMatcher.group(CMD_NAME), CMD_OPTIONS, true);
             }
+            LOGGER.debug(cmdLine);
             try
             {
                 CommandLineParser parser = new DefaultParser();
