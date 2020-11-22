@@ -21,10 +21,9 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import net.unknowndomain.alea.dice.D10;
-import net.unknowndomain.alea.messages.MsgBuilder;
-import net.unknowndomain.alea.messages.ReturnMsg;
+import net.unknowndomain.alea.dice.standard.D10;
 import net.unknowndomain.alea.pools.DicePool;
+import net.unknowndomain.alea.roll.GenericResult;
 import net.unknowndomain.alea.roll.GenericRoll;
 
 /**
@@ -80,36 +79,16 @@ public class ProjectHope2Roll implements GenericRoll
     }
     
     @Override
-    public ReturnMsg getResult()
+    public GenericResult getResult()
     {
         List<Integer> resultsPool = this.dicePool.getResults();
         List<Integer> res = new ArrayList<>();
         res.addAll(resultsPool);
         ProjectHope2Results results = buildResults(res);
-        return formatResults(results);
+        results.setVerbose(mods.contains(Modifiers.VERBOSE));
+        return results;
     }
     
-    private ReturnMsg formatResults(ProjectHope2Results results)
-    {
-        MsgBuilder mb = new MsgBuilder();
-        mb.append("Successes: ").append(results.getSuccesses()).appendNewLine();
-        mb.append("Leftovers: ").append(results.getLeftovers().size()).appendNewLine();
-        if (mods.contains(Modifiers.VERBOSE))
-        {
-            mb.append("Automatic: ").append(results.getSuccesses() - results.getSuccessDice().size()).appendNewLine();
-            if (this.potential > 10)
-            {
-                mb.append("Increment: true (").append(results.getOldValue()).append(" => ").append(results.getNewValue()).append(")").appendNewLine();
-            }
-            mb.append("Results: ").append(" [ ");
-            for (Integer t : results.getResults())
-            {
-                mb.append(t).append(" ");
-            }
-            mb.append("]").appendNewLine();
-        }
-        return mb.build();
-    }
     
     private ProjectHope2Results buildResults(List<Integer> res)
     {
@@ -135,6 +114,7 @@ public class ProjectHope2Roll implements GenericRoll
         }
         if ((this.potential > 10) && (!left.isEmpty()))
         {
+            results.setIncrement(true);
             int module = this.potential % 10;
             if (module > left.size())
             {

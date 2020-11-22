@@ -18,12 +18,14 @@ package net.unknowndomain.alea.systems.projecthope2;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import net.unknowndomain.alea.messages.MsgBuilder;
+import net.unknowndomain.alea.roll.GenericResult;
 
 /**
  *
  * @author journeyman
  */
-public class ProjectHope2Results
+public class ProjectHope2Results extends GenericResult
 {
     private final List<Integer> results;
     private int successes = 0;
@@ -31,6 +33,7 @@ public class ProjectHope2Results
     private Integer newValue;
     private List<Integer> successDice = new ArrayList<>();
     private List<Integer> leftovers;
+    private boolean increment = false;
     
     public ProjectHope2Results(List<Integer> results)
     {
@@ -102,6 +105,37 @@ public class ProjectHope2Results
     public void setLeftovers(List<Integer> leftovers)
     {
         this.leftovers = leftovers;
+    }
+
+    @Override
+    protected void formatResults(MsgBuilder messageBuilder, boolean verbose, int indentValue)
+    {
+        messageBuilder.append("Successes: ").append(getSuccesses()).appendNewLine();
+        messageBuilder.append("Leftovers: ").append(getLeftovers().size()).appendNewLine();
+        if (verbose)
+        {
+            messageBuilder.append("Automatic: ").append(getSuccesses() - getSuccessDice().size()).appendNewLine();
+            if (increment)
+            {
+                messageBuilder.append("Increment: true (").append(getOldValue()).append(" => ").append(getNewValue()).append(")").appendNewLine();
+            }
+            messageBuilder.append("Results: ").append(" [ ");
+            for (Integer t : getResults())
+            {
+                messageBuilder.append(t).append(" ");
+            }
+            messageBuilder.append("]").appendNewLine();
+        }
+    }
+
+    public boolean isIncrement()
+    {
+        return increment;
+    }
+
+    public void setIncrement(boolean increment)
+    {
+        this.increment = increment;
     }
 
 }
