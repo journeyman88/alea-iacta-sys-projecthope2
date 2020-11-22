@@ -22,9 +22,10 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import net.unknowndomain.alea.dice.D10;
+import net.unknowndomain.alea.messages.MsgBuilder;
+import net.unknowndomain.alea.messages.ReturnMsg;
 import net.unknowndomain.alea.pools.DicePool;
 import net.unknowndomain.alea.roll.GenericRoll;
-import org.javacord.api.entity.message.MessageBuilder;
 
 /**
  *
@@ -79,7 +80,7 @@ public class ProjectHope2Roll implements GenericRoll
     }
     
     @Override
-    public MessageBuilder getResult()
+    public ReturnMsg getResult()
     {
         List<Integer> resultsPool = this.dicePool.getResults();
         List<Integer> res = new ArrayList<>();
@@ -88,9 +89,9 @@ public class ProjectHope2Roll implements GenericRoll
         return formatResults(results);
     }
     
-    private MessageBuilder formatResults(ProjectHope2Results results)
+    private ReturnMsg formatResults(ProjectHope2Results results)
     {
-        MessageBuilder mb = new MessageBuilder();
+        MsgBuilder mb = new MsgBuilder();
         mb.append("Successes: ").append(results.getSuccesses()).appendNewLine();
         mb.append("Leftovers: ").append(results.getLeftovers().size()).appendNewLine();
         if (mods.contains(Modifiers.VERBOSE))
@@ -107,7 +108,7 @@ public class ProjectHope2Roll implements GenericRoll
             }
             mb.append("]").appendNewLine();
         }
-        return mb;
+        return mb.build();
     }
     
     private ProjectHope2Results buildResults(List<Integer> res)
