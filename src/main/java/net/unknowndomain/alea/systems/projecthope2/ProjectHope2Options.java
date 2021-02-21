@@ -20,7 +20,7 @@ import net.unknowndomain.alea.systems.annotations.RpgSystemOption;
 @RpgSystemData(bundleName = "net.unknowndomain.alea.systems.projecthope2.RpgSystemBundle")
 public class ProjectHope2Options extends RpgSystemOptions
 {
-    @RpgSystemOption(name = "potential", shortcode = "p", description = "projecthope2.options.action", argName = "potentialValue")
+    @RpgSystemOption(name = "potential", shortcode = "p", description = "projecthope2.options.potential", argName = "potentialValue")
     private Integer potential;
     @RpgSystemOption(name = "threshold", shortcode = "t", description = "projecthope2.options.threshold", argName = "thresholdValue")
     private Integer threshold;
