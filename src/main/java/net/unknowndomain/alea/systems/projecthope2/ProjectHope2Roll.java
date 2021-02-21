@@ -33,22 +33,17 @@ import net.unknowndomain.alea.roll.GenericRoll;
 public class ProjectHope2Roll implements GenericRoll
 {
     
-    public enum Modifiers
-    {
-        VERBOSE
-    }
-    
     private final DicePool<D10> dicePool;
     private final Integer potential;
     private final Integer threshold;
-    private final Set<Modifiers> mods;
+    private final Set<ProjectHope2Modifiers> mods;
     
-    public ProjectHope2Roll(Integer potential, Integer threshold, Modifiers ... mod)
+    public ProjectHope2Roll(Integer potential, Integer threshold, ProjectHope2Modifiers ... mod)
     {
         this(potential, threshold, Arrays.asList(mod));
     }
     
-    public ProjectHope2Roll(Integer potential, Integer threshold, Collection<Modifiers> mod)
+    public ProjectHope2Roll(Integer potential, Integer threshold, Collection<ProjectHope2Modifiers> mod)
     {
         this.mods = new HashSet<>();
         if (mod != null)
@@ -85,7 +80,7 @@ public class ProjectHope2Roll implements GenericRoll
         List<Integer> res = new ArrayList<>();
         res.addAll(resultsPool);
         ProjectHope2Results results = buildResults(res);
-        results.setVerbose(mods.contains(Modifiers.VERBOSE));
+        results.setVerbose(mods.contains(ProjectHope2Modifiers.VERBOSE));
         return results;
     }
     
