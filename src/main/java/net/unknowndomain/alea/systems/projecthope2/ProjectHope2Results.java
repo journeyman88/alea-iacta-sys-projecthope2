@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import net.unknowndomain.alea.messages.MsgBuilder;
+import net.unknowndomain.alea.random.SingleResult;
 import net.unknowndomain.alea.roll.GenericResult;
 
 /**
@@ -27,22 +28,22 @@ import net.unknowndomain.alea.roll.GenericResult;
  */
 public class ProjectHope2Results extends GenericResult
 {
-    private final List<Integer> results;
+    private final List<SingleResult<Integer>> results;
     private int successes = 0;
-    private Integer oldValue;
-    private Integer newValue;
-    private List<Integer> successDice = new ArrayList<>();
-    private List<Integer> leftovers;
+    private SingleResult<Integer> oldValue;
+    private SingleResult<Integer> newValue;
+    private List<SingleResult<Integer>> successDice = new ArrayList<>();
+    private List<SingleResult<Integer>> leftovers;
     private boolean increment = false;
     
-    public ProjectHope2Results(List<Integer> results)
+    public ProjectHope2Results(List<SingleResult<Integer>> results)
     {
-        List<Integer> tmp = new ArrayList<>(results.size());
+        List<SingleResult<Integer>> tmp = new ArrayList<>(results.size());
         tmp.addAll(results);
         this.results = Collections.unmodifiableList(tmp);
     }
     
-    public void addSuccess(Integer dice)
+    public void addSuccess(SingleResult<Integer> dice)
     {
         addSuccess(1, dice);
     }
@@ -53,7 +54,7 @@ public class ProjectHope2Results extends GenericResult
     }
     
     
-    private void addSuccess(int value, Integer dice)
+    private void addSuccess(int value, SingleResult<Integer> dice)
     {
         if (dice != null)
         {
@@ -67,42 +68,42 @@ public class ProjectHope2Results extends GenericResult
         return successes;
     }
 
-    public List<Integer> getResults()
+    public List<SingleResult<Integer>> getResults()
     {
         return results;
     }
 
-    public Integer getNewValue()
+    public SingleResult<Integer> getNewValue()
     {
         return newValue;
     }
 
-    public void setNewValue(Integer newValue)
+    public void setNewValue(SingleResult<Integer> newValue)
     {
         this.newValue = newValue;
     }
 
-    public Integer getOldValue()
+    public SingleResult<Integer> getOldValue()
     {
         return oldValue;
     }
 
-    public void setOldValue(Integer oldValue)
+    public void setOldValue(SingleResult<Integer> oldValue)
     {
         this.oldValue = oldValue;
     }
 
-    public List<Integer> getSuccessDice()
+    public List<SingleResult<Integer>> getSuccessDice()
     {
         return successDice;
     }
 
-    public List<Integer> getLeftovers()
+    public List<SingleResult<Integer>> getLeftovers()
     {
         return leftovers;
     }
 
-    public void setLeftovers(List<Integer> leftovers)
+    public void setLeftovers(List<SingleResult<Integer>> leftovers)
     {
         this.leftovers = leftovers;
     }
@@ -121,9 +122,10 @@ public class ProjectHope2Results extends GenericResult
             }
             messageBuilder.append("Roll ID: ").append(getUuid()).appendNewLine();
             messageBuilder.append("Results: ").append(" [ ");
-            for (Integer t : getResults())
+            for (SingleResult<Integer> t : getResults())
             {
-                messageBuilder.append(t).append(" ");
+                messageBuilder.append("( ").append(t.getLabel()).append(" => ");
+                messageBuilder.append(t.getValue()).append(") ");
             }
             messageBuilder.append("]").appendNewLine();
         }

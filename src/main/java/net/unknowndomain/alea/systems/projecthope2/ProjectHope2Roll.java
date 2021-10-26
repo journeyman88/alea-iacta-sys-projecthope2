@@ -21,8 +21,10 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import net.unknowndomain.alea.dice.standard.D10;
-import net.unknowndomain.alea.pools.DicePool;
+import net.unknowndomain.alea.random.SingleResult;
+import net.unknowndomain.alea.random.SingleResultComparator;
+import net.unknowndomain.alea.random.dice.DicePool;
+import net.unknowndomain.alea.random.dice.bag.D10;
 import net.unknowndomain.alea.roll.GenericResult;
 import net.unknowndomain.alea.roll.GenericRoll;
 
@@ -76,8 +78,8 @@ public class ProjectHope2Roll implements GenericRoll
     @Override
     public GenericResult getResult()
     {
-        List<Integer> resultsPool = this.dicePool.getResults();
-        List<Integer> res = new ArrayList<>();
+        List<SingleResult<Integer>> resultsPool = this.dicePool.getResults();
+        List<SingleResult<Integer>> res = new ArrayList<>();
         res.addAll(resultsPool);
         ProjectHope2Results results = buildResults(res);
         results.setVerbose(mods.contains(ProjectHope2Modifiers.VERBOSE));
@@ -85,20 +87,18 @@ public class ProjectHope2Roll implements GenericRoll
     }
     
     
-    private ProjectHope2Results buildResults(List<Integer> res)
+    private ProjectHope2Results buildResults(List<SingleResult<Integer>> res)
     {
-        res.sort((Integer o1, Integer o2) ->
-        {
-            return o1.compareTo(o2);
-        });
+        SingleResultComparator comp = new SingleResultComparator();
+        res.sort(comp);
         ProjectHope2Results results = new ProjectHope2Results(res);
         int auto = this.potential / 10;
-        List<Integer> left = new ArrayList<>();
+        List<SingleResult<Integer>> left = new ArrayList<>();
         results.addAutoSuccesses(auto);
         while(!res.isEmpty())
         {
-            int value = res.remove(0);
-            if (value >= this.threshold)
+            SingleResult<Integer> value = res.remove(0);
+            if (value.getValue() >= this.threshold)
             {
                 results.addSuccess(value);
             }
@@ -115,10 +115,10 @@ public class ProjectHope2Roll implements GenericRoll
             {
                 module = left.size();
             }
-            int value = left.remove(module-1);
+            SingleResult<Integer> value = left.remove(module-1);
             results.setOldValue(value);
-            results.setNewValue(value+3);
-            if (results.getNewValue() >= this.threshold)
+            results.setNewValue(new SingleResult<>("d10 + 3", value.getValue() + 3));
+            if (results.getNewValue().getValue() >= this.threshold)
             {
                 results.addSuccess(results.getNewValue());
             }
