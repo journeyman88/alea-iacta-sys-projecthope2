@@ -20,14 +20,16 @@ import java.util.Collections;
 import java.util.List;
 import net.unknowndomain.alea.messages.MsgBuilder;
 import net.unknowndomain.alea.random.SingleResult;
-import net.unknowndomain.alea.roll.GenericResult;
+import net.unknowndomain.alea.roll.LocalizedResult;
 
 /**
  *
  * @author journeyman
  */
-public class ProjectHope2Results extends GenericResult
+public class ProjectHope2Results extends LocalizedResult
 {
+    private final static String BUNDLE_NAME = "net.unknowndomain.alea.systems.projecthope2.RpgSystemBundle";
+    
     private final List<SingleResult<Integer>> results;
     private int successes = 0;
     private SingleResult<Integer> oldValue;
@@ -111,17 +113,18 @@ public class ProjectHope2Results extends GenericResult
     @Override
     protected void formatResults(MsgBuilder messageBuilder, boolean verbose, int indentValue)
     {
-        messageBuilder.append("Successes: ").append(getSuccesses()).appendNewLine();
-        messageBuilder.append("Leftovers: ").append(getLeftovers().size()).appendNewLine();
+        messageBuilder.append(translate("projecthope2.results.successes", getSuccesses())).appendNewLine();
+        messageBuilder.append(translate("projecthope2.results.leftovers", getLeftovers().size())).appendNewLine();
         if (verbose)
         {
-            messageBuilder.append("Automatic: ").append(getSuccesses() - getSuccessDice().size()).appendNewLine();
+            messageBuilder.append(translate("projecthope2.results.automatic", getSuccesses() - getSuccessDice().size())).appendNewLine();
             if (increment)
             {
-                messageBuilder.append("Increment: true (").append(getOldValue()).append(" => ").append(getNewValue()).append(")").appendNewLine();
+                messageBuilder.append(translate("projecthope2.results.increment", increment));
+                messageBuilder.append(" (").append(getOldValue()).append(" => ").append(getNewValue()).append(")").appendNewLine();
             }
             messageBuilder.append("Roll ID: ").append(getUuid()).appendNewLine();
-            messageBuilder.append("Results: ").append(" [ ");
+            messageBuilder.append(translate("projecthope2.results.diceResults")).append(" [ ");
             for (SingleResult<Integer> t : getResults())
             {
                 messageBuilder.append("( ").append(t.getLabel()).append(" => ");
@@ -139,6 +142,12 @@ public class ProjectHope2Results extends GenericResult
     public void setIncrement(boolean increment)
     {
         this.increment = increment;
+    }
+
+    @Override
+    protected String getBundleName()
+    {
+        return BUNDLE_NAME;
     }
 
 }

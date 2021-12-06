@@ -61,7 +61,7 @@ public class ProjectHope2Command extends RpgSystemCommand
         else
         {
             ProjectHope2Options opt = (ProjectHope2Options) options;
-            ProjectHope2Roll roll = new ProjectHope2Roll(opt.getPotential(), opt.getThreshold(), opt.getModifiers());
+            ProjectHope2Roll roll = new ProjectHope2Roll(opt.getPotential(), opt.getThreshold(), lang, opt.getModifiers());
             retVal = Optional.of(roll);
         }
         return retVal;
